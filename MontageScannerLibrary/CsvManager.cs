@@ -20,7 +20,7 @@ namespace MontageScanLib
         static string filePath = "MontageScan.csv";
 
         public static void CreateCsvFile()
-        {
+        { 
             if (File.Exists(filePath) == false)
             {
                 using var writer = new StreamWriter(filePath);
@@ -28,9 +28,9 @@ namespace MontageScanLib
                 SaveToCsv.Context.RegisterClassMap<MontageLieferscheinScanMap>();
                 SaveToCsv.WriteHeader<MontageLieferscheinModel>();
                 SaveToCsv.NextRecord();
-
+                
             }
-
+        
         }
 
         public static void WriteToCsv(MontageLieferscheinModel input)
@@ -48,7 +48,7 @@ namespace MontageScanLib
             }
 
         }
-
+     
         public static string SearchForLS(string input)
         {
             using var reader = new StreamReader(filePath);

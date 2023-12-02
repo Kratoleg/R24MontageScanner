@@ -1,14 +1,4 @@
 ﻿using CsvHelper.Configuration;
-using CsvHelper.Configuration.Attributes;
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace MontageScanLib
