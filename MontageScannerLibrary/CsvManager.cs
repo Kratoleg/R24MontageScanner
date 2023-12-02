@@ -55,16 +55,19 @@ namespace MontageScanLib
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             var records = csv.GetRecords<CSVReadMontageLieferscheinModel>();
 
-            string output = "Lieferschein nicht gefunden";
+            string positivOutput = string.Empty;
+            string negativOutput = "Lieferschein nicht gefunden";
             foreach (var record in records)
             {
                 if (record.Lieferschein == input)
                 {
-                    output = $"Lieferschein {record.Lieferschein} gescannt: {record.EingangsTimeStamp}";
+                    positivOutput += $"Lieferschein {record.Lieferschein} gescannt: {record.EingangsTimeStamp}\n";
                 }
 
             }
-            return output;
+            if (positivOutput.Length > negativOutput.Length) { return positivOutput; }
+            else { return negativOutput; }
+            
         }
 
         public static void FillListWithLastEntrys(BindingList<MontageLieferscheinModel> inputList, int amount)
