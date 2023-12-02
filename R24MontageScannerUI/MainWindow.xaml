@@ -1,0 +1,64 @@
+﻿<Window x:Class="MontageEingangScanUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MontageEingangScanUI"
+        mc:Ignorable="d"
+        Title="Montage LS-Scanner" Height="550" Width="430" FontSize="18" >
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="30"/>
+
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+
+            <ColumnDefinition Width="*"/>
+
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Label>Eingang:</Label>
+            <TextBox x:Name="eingangsScanTextBox" MinWidth="150" Margin="10 0 0 0" KeyDown="eingangsScanTextBox_KeyDown" TabIndex="1"  />
+
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <Label>Prüfung:</Label>
+            <TextBox x:Name="KontrolleTextBox" MinWidth="150" Margin="10 0 0 0" KeyDown="KontrolleTextBox_KeyDown" TabIndex="2" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1"  VerticalAlignment="Center">
+
+            <ListBox  x:Name="AuftragsListe" HorizontalAlignment="Center" MinHeight="300" MaxHeight="350" MinWidth="350" VerticalAlignment="Bottom" Loaded="AuftragsListe_Loaded"  >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
+                            <StackPanel Orientation="Horizontal" AllowDrop="True" >
+                                <TextBlock Text="{Binding Path=Lieferschein}" />
+                                <TextBlock Text="      " />
+                                <TextBlock Text="{Binding Path=StringEingangsTimeStamp}" />
+
+
+                            </StackPanel>
+                        </ScrollViewer>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+        </StackPanel>
+
+
+
+    </Grid>
+
+
+</Window>
