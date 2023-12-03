@@ -5,7 +5,7 @@
 namespace MontageScanLib
 {
 
-    public class CSVReadMontageLieferscheinModel
+    internal class CSVReadMontageLieferscheinModel
     {
         //L123456,Status,EingangsDatum,MontageDatum,VersandDatum,Mitarbeiter;
 

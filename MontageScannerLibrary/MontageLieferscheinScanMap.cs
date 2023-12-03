@@ -3,9 +3,9 @@
 
 namespace MontageScanLib
 {
-    public class MontageLieferscheinScanMap : ClassMap<MontageLieferscheinModel>
+    internal class MontageLieferscheinScanMap : ClassMap<MontageLieferscheinModel>
     {
-        public MontageLieferscheinScanMap()
+        internal MontageLieferscheinScanMap()
         {
             Map(m => m.Lieferschein).Name("Lieferschein");
             Map(m => m.Status).Name("Status");
