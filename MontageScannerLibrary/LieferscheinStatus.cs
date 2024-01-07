@@ -12,8 +12,8 @@ namespace MontageScanLib
         {
             kommissionierung,
             montage,
-            vorbVersand,
-            versand
+            versand,
+            storniert
         }
     }
 }

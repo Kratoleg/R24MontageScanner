@@ -9,9 +9,9 @@ using Dapper;
 
 namespace SqlAccessLib
 {
-    internal class DataAccess
+    internal class SqlAccess
     {
-        public List<T> LoadData<T, U>(string sqlStatement, U parameters, string connectionString)
+        internal List<T> LoadData<T, U>(string sqlStatement, U parameters, string connectionString)
         {
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
@@ -21,7 +21,7 @@ namespace SqlAccessLib
         }
 
 
-        public void SaveData<T>(string sqlStatement, T parameters, string connectionString)
+        internal void SaveData<T>(string sqlStatement, T parameters, string connectionString)
         {
             using (IDbConnection connection = new SqlConnection(connectionString))
             {

@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MontageScannerLibrary", "Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MontageScannerLibrary.Tests", "MontageScannerLibrary.Tests\MontageScannerLibrary.Tests.csproj", "{AD675F86-33C1-4731-A042-AC4312DA2C11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlAccessLib", "SqlAccessLib\SqlAccessLib.csproj", "{70510720-A5D1-4804-A41C-56A9AB417F29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlAccessLib", "SqlAccessLib\SqlAccessLib.csproj", "{70510720-A5D1-4804-A41C-56A9AB417F29}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MontageScanner", "MontageScanner\MontageScanner.sqlproj", "{E6D2309A-38D2-411A-A69F-046050CA3801}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,12 @@ Global
 		{70510720-A5D1-4804-A41C-56A9AB417F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70510720-A5D1-4804-A41C-56A9AB417F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70510720-A5D1-4804-A41C-56A9AB417F29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6D2309A-38D2-411A-A69F-046050CA3801}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D2309A-38D2-411A-A69F-046050CA3801}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D2309A-38D2-411A-A69F-046050CA3801}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E6D2309A-38D2-411A-A69F-046050CA3801}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D2309A-38D2-411A-A69F-046050CA3801}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6D2309A-38D2-411A-A69F-046050CA3801}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
