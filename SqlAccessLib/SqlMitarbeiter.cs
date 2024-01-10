@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlAccessLib.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,12 +16,19 @@ namespace SqlAccessLib
             _connectionString = connectionString;
         }
 
-        public void AddMitarbeiter()
+        public void AddMitarbeiter(MitarbeiterModel mitarbeiter)
         {
-            //Take in MitarbeiterModel and save to Db
+            string sql = "insert into dbo.Mitarbeiter (Vorname, Nachname, ChipId) values (@Vorname, @Nachname, @ChipId);";
+            db.SaveData(sql, 
+                new { mitarbeiter.Vorname, mitarbeiter.Nachname, mitarbeiter.ChipId },
+                _connectionString);
         }
 
-
+        public void UpdateChipId(MitarbeiterModel mitarbeiter)
+        {
+            string sql = "update dbo.Mitarbeiter set Vorname = @Vorname, Nachname = @Nachname, ChipId = @ChipId;";
+            db.SaveData(sql, mitarbeiter, _connectionString);
+        }
 
     }
 }
