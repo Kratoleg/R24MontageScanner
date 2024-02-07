@@ -10,4 +10,8 @@
     <PackageReference Include="CsvHelper" Version="30.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\R24MontageScannerSqlAccess\R24MontageScannerSqlAccess.csproj" />
+  </ItemGroup>
+
 </Project>
