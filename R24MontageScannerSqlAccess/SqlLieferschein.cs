@@ -32,7 +32,7 @@ public class SqlLieferschein
     private bool InputLsCheck(EingangsLieferscheinModel input)
     {
         bool output = false;
-        if(input.Lieferschein.Length == 7 && input.EingangsTS.Year == DateTime.Now.Year)
+        if(input.Lieferschein.Length == 6 && input.EingangsTS.Year == DateTime.Now.Year)
         {
             output = true;
         }
