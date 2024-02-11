@@ -42,14 +42,14 @@
             <TextBox x:Name="nachNameTextBox" MinWidth="150" Margin="10 0 0 0"  TabIndex="2" Width="204" Visibility="Collapsed" />
         </StackPanel>
         <StackPanel x:Name="addButton" Grid.Row="4" Grid.Column="2" Orientation="Horizontal"  HorizontalAlignment="Right" VerticalAlignment="Center" Grid.ColumnSpan="4" Visibility="Collapsed" >
-            <Button Content="Hinzufügen" FontSize="22" HorizontalAlignment="Center" TabIndex="3" VerticalAlignment="Center" Width="250" Height="50" Click="Button_Click"/>
+            <Button Content="Hinzufügen" FontSize="22" HorizontalAlignment="Center" TabIndex="3" VerticalAlignment="Center" Width="250" Height="50" Click="BtnClick_Add"/>
         </StackPanel>
         <StackPanel x:Name="updateButton" Grid.Row="4" Grid.Column="2" Orientation="Horizontal"  HorizontalAlignment="Right" VerticalAlignment="Center" Grid.ColumnSpan="4" Visibility="Collapsed">
-            <Button Content="Aktualisieren" FontSize="22" HorizontalAlignment="Center" TabIndex="3" VerticalAlignment="Center" Width="250" Height="50" Click="Button_Click"/>
+            <Button Content="Aktualisieren" FontSize="22" HorizontalAlignment="Center" TabIndex="3" VerticalAlignment="Center" Width="250" Height="50" Click="BtnClick_Update"/>
         </StackPanel>
 
         <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="4" >
-            <Button Content="Abbrechen" FontSize="22" HorizontalAlignment="Center" TabIndex="4" VerticalAlignment="Center" Width="130" Height="50" Click="Button_Click"/>
+            <Button Content="Abbrechen" FontSize="22" HorizontalAlignment="Center" TabIndex="4" VerticalAlignment="Center" Width="130" Height="50" Click="BtnClick_Close"/>
         </StackPanel>
 
 

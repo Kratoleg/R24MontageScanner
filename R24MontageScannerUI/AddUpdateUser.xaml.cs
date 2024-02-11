@@ -114,4 +114,9 @@ public partial class AddUpdateUser : Window
         sender.Clear();
         sender.Focus();
     }
+
+    private void BtnClick_Close(object sender, RoutedEventArgs e)
+    {
+        this.Close();
+    }
 }
