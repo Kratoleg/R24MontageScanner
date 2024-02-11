@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MontageScanLib;
 using R24MontageScannerSqlAccess;
+using R24MontageScannerUI;
 
 
 
@@ -29,7 +30,11 @@ public partial class MainWindow : Window
         AuftragsListe.ItemsSource = angezeigteLieferscheine;
 
     }
-
+    private string getConnectionString()
+    {
+        //Get Connectionstring from config
+        return "";
+    }
 
     private void AuftragsListe_Loaded(object sender, RoutedEventArgs e)
     {
@@ -95,5 +100,13 @@ public partial class MainWindow : Window
         sender.Background = Brushes.Red;
         sender.Clear();
         sender.Focus();
+    }
+
+    private void neuesMitarbeiterFenster(object sender, RoutedEventArgs e)
+       
+    {
+        SqlMitarbeiter sqlMitarbeiter = new SqlMitarbeiter(getConnectionString());
+
+        AddUpdateUser addUser = new AddUpdateUser(sqlMitarbeiter);
     }
 }

@@ -23,7 +23,7 @@ public class SqlMitarbeiter
     _connectionString);
     }
 
-    public void UpdateMitarbeiterName(MitarbeiterModel mitarbeiter)
+    public void UpdateMitarbeiterNameByChipId(MitarbeiterModel mitarbeiter)
     {
         string command = "update dbo.Mitarbeiter set Vorname = @Vorname, Nachname = @Nachname where ChipId = @ChipId;";
         dbAccess.SaveData(command, mitarbeiter, _connectionString);

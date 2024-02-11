@@ -52,10 +52,7 @@ public partial class AddUpdateUser : Window
         }
     }
 
-    private void DisplayEmployeeName()
-    {
-        displayedMa = _sqlMa.GetMiarbeiterByChip(ChipTextBox.Text);
-    }
+
 
     private MitarbeiterModel GetMitarbeiter(string ChipId)
     {
@@ -92,8 +89,22 @@ public partial class AddUpdateUser : Window
     }
 
 
+    private void BtnClick_Update(object sender, RoutedEventArgs e)
+    {
+        MitarbeiterModel input = new MitarbeiterModel { Vorname = vorNameTextBox.Text, Nachname = nachNameTextBox.Text, ChipId = ChipTextBox.Text };
+        if (input.validMitarbeiterInput())
+        {
+            _sqlMa.UpdateMitarbeiterNameByChipId(input);
+        }
+        
+        
+    }
 
-
+    private void BtnClick_Add(object sender, RoutedEventArgs e)
+    {
+        MitarbeiterModel input = new MitarbeiterModel { Vorname = vorNameTextBox.Text, Nachname = nachNameTextBox.Text, ChipId = ChipTextBox.Text };
+        _sqlMa.AddMiarbeiter(input);
+    }
 
 
 
