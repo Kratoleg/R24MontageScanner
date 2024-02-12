@@ -17,7 +17,7 @@ public class SqlLieferschein
     {
         if (InputLsCheck(input) == true)
         {
-            string command = "insert indo dbo.Vorgang (Lieferschein, EingangsTS) values (@Lieferscheinm  @EingangsTS);";
+            string command = "insert into dbo.Vorgang (Lieferschein, EingangsTS) values (@Lieferschein  @EingangsTS);";
             dbAccess.SaveData(command,
         new { input.Lieferschein, input.EingangsTS },
         _connectionString);
@@ -26,16 +26,25 @@ public class SqlLieferschein
         {
             throw new Exception("no valid input");
         }
-        
+
     }
 
-    private bool InputLsCheck(EingangsLieferscheinModel input)
+    public void LieferscheinMontageScan(MontageLieferscheinModel input, int MonteurId)
     {
-        bool output = false;
-        if(input.Lieferschein.Length == 6 && input.EingangsTS.Year == DateTime.Now.Year)
-        {
-            output = true;
-        }
-        return output;
+        //I was about to check the Values before
+        string command = "update dbo.Vorgang set (MontageTS, MitarbeiterId) values (@MontageTS, @MonteurId) where where Lieferschein = @Lieferschein ;";
+        dbAccess.SaveData(command, new { input.MontageTS, MonteurId }, _connectionString);
     }
+
+
+
+private bool InputLsCheck(EingangsLieferscheinModel input)
+{
+    bool output = false;
+    if (input.Lieferschein.Length == 6 && (input.EingangsTS.Year + 1 == DateTime.Now.Year || input.EingangsTS.Year == DateTime.Now.Year))
+    {
+        output = true;
+    }
+    return output;
+}
 }

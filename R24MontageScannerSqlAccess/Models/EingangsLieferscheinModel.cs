@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace R24MontageScannerSqlAccess.Models
-{
-    public class EingangsLieferscheinModel : LieferscheinModel
-    {
-        public DateTime EingangsTS { get;}
+namespace R24MontageScannerSqlAccess.Models;
 
-        public EingangsLieferscheinModel()
-        {
-            EingangsTS = DateTime.Now;
-        }
+public class EingangsLieferscheinModel : LieferscheinModel
+{
+    public DateTime EingangsTS { get;}
+
+    public EingangsLieferscheinModel()
+    {
+        EingangsTS = DateTime.Now;
     }
 }

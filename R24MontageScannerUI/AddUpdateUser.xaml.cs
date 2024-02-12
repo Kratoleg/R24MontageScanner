@@ -30,6 +30,7 @@ public partial class AddUpdateUser : Window
     {
         InitializeComponent();
         _sqlMa = sqlMA;
+
     }
 
     private void ChipTextBox_KeyDown(object sender, KeyEventArgs e)

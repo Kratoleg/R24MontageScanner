@@ -108,5 +108,6 @@ public partial class MainWindow : Window
         SqlMitarbeiter sqlMitarbeiter = new SqlMitarbeiter(getConnectionString());
 
         AddUpdateUser addUser = new AddUpdateUser(sqlMitarbeiter);
+        addUser.Show();
     }
 }
