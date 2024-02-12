@@ -1,9 +1,13 @@
-﻿using R24MontageScannerSqlAccess;
+﻿using MontageScannerLibrary;
+using R24MontageScannerSqlAccess;
+using R24MontageScannerSqlAccess.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -16,7 +20,7 @@ public static class UserInterfaceLogic
     /// </summary>
     /// <param name="input">Inputstring</param>
     /// <returns>true wenn eingabe Buchstabe und 6 Ziffern sind</returns>
-    public static bool InputCheckLieferschein(this string input)
+    public static bool inputCheckLieferschein(this string input)
     {
         bool output = false;
 
@@ -55,14 +59,10 @@ public static class UserInterfaceLogic
     /// </summary>
     /// <param name="input"> input chipid</param>
     /// <returns></returns>
-    public static bool InputCheckChipId(this string input)
+    public static bool inputCheckChipId(this string input)
     {
-        bool output = false;
-
-        //Check ChipID 
-
+        bool output = Regex.IsMatch(input, @"^\d{10}$");
         return output;
-
     }
 
     /// <summary>
@@ -74,7 +74,7 @@ public static class UserInterfaceLogic
     {
         bool output = false;
 
-        if(input.Vorname.Length > 0 && input.Vorname.Length < 20 && input.Vorname != null &&
+        if (input.Vorname.Length > 0 && input.Vorname.Length < 20 && input.Vorname != null &&
             input.Nachname.Length > 0 && input.Nachname.Length < 20 && input.Nachname != null
             )
         {
@@ -82,4 +82,15 @@ public static class UserInterfaceLogic
         }
         return output;
     }
+
+
+    public static DisplayedModel addToDisplay(DisplayedModel liste, MitarbeiterModel user, MontageLieferscheinModel lieferschein)
+    {
+        liste.Lieferschein = lieferschein.Lieferschein;
+        liste.TimeStamp = lieferschein.MontageTS;
+        liste.Nachname = user.Nachname;
+
+        return liste;
+    }
 }
+

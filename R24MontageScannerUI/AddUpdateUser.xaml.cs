@@ -18,26 +18,25 @@ using R24MontageScannerSqlAccess;
 
 namespace R24MontageScannerUI;
 
-/// <summary>
-/// Interaction logic for AddUpdateUser.xaml
-/// </summary>
+
 public partial class AddUpdateUser : Window
 {
 
     private SqlMitarbeiter _sqlMa;
     private MitarbeiterModel displayedMa = new MitarbeiterModel();
-    public AddUpdateUser(SqlMitarbeiter sqlMA)
+    public AddUpdateUser(string connectionString)
     {
         InitializeComponent();
-        _sqlMa = sqlMA;
+        _sqlMa = new SqlMitarbeiter(connectionString); 
 
     }
 
     private void ChipTextBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
+           
         {
-            if (ChipTextBox.Text.InputCheckChipId())
+            if (ChipTextBox.Text.inputCheckChipId())
             {
                 //Check if there is a Employee with this ChipId
                 DisplayNameOfMitarbeiter(GetMitarbeiter(ChipTextBox.Text));
@@ -62,7 +61,7 @@ public partial class AddUpdateUser : Window
         {
             output = _sqlMa.GetMiarbeiterByChip(ChipTextBox.Text);
         }
-        catch (Exception ex)
+        catch 
         {
 
         }
@@ -97,17 +96,32 @@ public partial class AddUpdateUser : Window
         {
             _sqlMa.UpdateMitarbeiterNameByChipId(input);
         }
-        
-        
+        resetUI(this);
+
     }
 
     private void BtnClick_Add(object sender, RoutedEventArgs e)
     {
         MitarbeiterModel input = new MitarbeiterModel { Vorname = vorNameTextBox.Text, Nachname = nachNameTextBox.Text, ChipId = ChipTextBox.Text };
         _sqlMa.AddMiarbeiter(input);
+        resetUI(this);
     }
 
-
+    private void resetUI(object sender)
+    {
+        updateButton.Visibility = Visibility.Collapsed;
+        addButton.Visibility = Visibility.Collapsed;
+        vorNameTextBox.Visibility = Visibility.Collapsed;
+        nachNameTextBox.Visibility = Visibility.Collapsed;
+        vorNameTextBox.Clear();
+        nachNameTextBox.Clear();
+        ChipTextBox.Clear();
+        ChipTextBox.Focus();
+        ChipTextBox.Background = Brushes.White;
+        vorNameTextBox.Clear();
+        nachNameTextBox.Clear();
+        
+    }
 
 
 

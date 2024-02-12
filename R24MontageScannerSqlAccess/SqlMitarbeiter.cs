@@ -30,7 +30,7 @@ public class SqlMitarbeiter
     }
     public MitarbeiterModel GetMiarbeiterByChip(string ChipId)
     {
-        string command = "select Id, Vorname, Nachname from dbo.Mitarbeiter where ChipId = @ChipId;";
+        string command = "select Id, Vorname, Nachname, ChipId from dbo.Mitarbeiter where ChipId = @ChipId;";
         MitarbeiterModel output = dbAccess.LoadData<MitarbeiterModel, dynamic>(command, new { ChipId }, _connectionString).FirstOrDefault();
       
         if (checkForValidModel(output) == true)
@@ -48,14 +48,18 @@ public class SqlMitarbeiter
     {
         bool output = false;
 
-        if(valueToCheck.ChipId != null && valueToCheck.Vorname != null && valueToCheck.Nachname != null)
+        if(valueToCheck != null)
         {
-           if(valueToCheck.ChipId.Length > 0 && valueToCheck.Vorname.Length > 0 && valueToCheck.Nachname.Length > 0) 
+            if (valueToCheck.Vorname != null && valueToCheck.Nachname != null)
             {
-                output = true;
+                if (valueToCheck.Vorname.Length > 0 && valueToCheck.Nachname.Length > 0)
+                {
+                    output = true;
+                }
+
             }
-            
         }
+   
         return output;
     }
 }

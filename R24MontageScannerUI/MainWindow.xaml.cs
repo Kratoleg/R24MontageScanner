@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MontageScanLib;
 using R24MontageScannerSqlAccess;
+using R24MontageScannerSqlAccess.Models;
 using R24MontageScannerUI;
 
 
@@ -17,23 +18,26 @@ namespace MontageEingangScanUI;
 /// </summary>
 public partial class MainWindow : Window
 {
-    BindingList<MontageLieferscheinModel> angezeigteLieferscheine = new BindingList<MontageLieferscheinModel>();
-
+    BindingList<EingangsLieferscheinModel> angezeigteLieferscheine = new BindingList<EingangsLieferscheinModel>();
+    SqlLieferschein sqlLieferschein;
 
 
     public MainWindow()
     {
         InitializeComponent();
-
-        CsvManager.CreateCsvFile();
-        CsvManager.FillListWithLastEntrys(angezeigteLieferscheine, 100);
+        sqlLieferschein = new SqlLieferschein(getConnectionString());
+       
+        //CsvManager.CreateCsvFile();
+        //CsvManager.FillListWithLastEntrys(angezeigteLieferscheine, 100);
         AuftragsListe.ItemsSource = angezeigteLieferscheine;
 
     }
     private string getConnectionString()
     {
         //Get Connectionstring from config
-        return "";
+        return "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=TrainingMontageScan;Integrated Security=True;Connect Timeout=30;Encrypt=False";
+        //Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TrainingMontageScan;Integrated Security=True;Connect Timeout=60;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False
+
     }
 
     private void AuftragsListe_Loaded(object sender, RoutedEventArgs e)
@@ -56,16 +60,23 @@ public partial class MainWindow : Window
     {
         if (e.Key == Key.Enter)
         {
-            if (eingangsScanTextBox.Text.InputCheckLieferschein())
+            if (eingangsScanTextBox.Text.inputCheckLieferschein())
             {
-                MontageLieferscheinModel eingabe = new MontageLieferscheinModel(eingangsScanTextBox.Text);
-                angezeigteLieferscheine.Add(eingabe);
+                EingangsLieferscheinModel lieferscheinScan = new EingangsLieferscheinModel(eingangsScanTextBox.Text);
+                if (lieferscheinExistsCheck(lieferscheinScan) == true)
+                {
+                    MessageBox.Show("Lieferschein bereits gescannt. Datum aktualisiert");
+                    sqlLieferschein.UpdateLieferschein(lieferscheinScan);
+                    angezeigteLieferscheine.Add(lieferscheinScan);
+                    uiCleanUp();
+                }
+                else
+                {
+                    sqlLieferschein.LieferscheinEingangsScan(lieferscheinScan);
+                    angezeigteLieferscheine.Add(lieferscheinScan);
+                    uiCleanUp();
+                }
 
-                
-                CsvManager.WriteToCsv(eingabe);
-                eingangsScanTextBox.Background = Brushes.White;
-                eingangsScanTextBox.Clear();
-                AuftragsListe.ScrollIntoView(AuftragsListe.Items[AuftragsListe.Items.Count - 1]);
             }
             else
             {
@@ -75,14 +86,36 @@ public partial class MainWindow : Window
 
         }
     }
+
+    private void uiCleanUp()
+    {
+        eingangsScanTextBox.Background = Brushes.White;
+        eingangsScanTextBox.Clear();
+        AuftragsListe.ScrollIntoView(AuftragsListe.Items[AuftragsListe.Items.Count - 1]);
+    }
+    private bool lieferscheinExistsCheck(EingangsLieferscheinModel input)
+    {
+        bool output;
+        try
+        {
+            sqlLieferschein.SucheNachLieferschein(input.Lieferschein);
+            output = true;
+        }
+        catch 
+        {
+            output = false;
+        }
+        return output;
+    }
     private void KontrolleTextBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
         {
-            if (KontrolleTextBox.Text.InputCheckLieferschein())
+            if (KontrolleTextBox.Text.inputCheckLieferschein())
             {
+                ;
 
-                MessageBox.Show(CsvManager.SearchForLS(KontrolleTextBox.Text));
+                MessageBox.Show(sqlLieferschein.SucheNachLieferschein(KontrolleTextBox.Text).ToString());
                 KontrolleTextBox.Clear();
                 KontrolleTextBox.Background = Brushes.White;
             }
@@ -105,9 +138,15 @@ public partial class MainWindow : Window
     private void neuesMitarbeiterFenster(object sender, RoutedEventArgs e)
        
     {
-        SqlMitarbeiter sqlMitarbeiter = new SqlMitarbeiter(getConnectionString());
+        
 
-        AddUpdateUser addUser = new AddUpdateUser(sqlMitarbeiter);
+        AddUpdateUser addUser = new AddUpdateUser(getConnectionString());
         addUser.Show();
+    }
+
+    private void MontageFenser(object sender, RoutedEventArgs e)
+    {
+        MonteurScanner montageScanner = new MonteurScanner(getConnectionString());
+        montageScanner.Show();
     }
 }
