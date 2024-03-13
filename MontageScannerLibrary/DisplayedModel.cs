@@ -12,5 +12,7 @@ namespace MontageScannerLibrary
         public string Nachname { get; set; }
         public DateTime TimeStamp { get; set; }
 
+        public string StringEingangsTS
+        { get { return TimeStamp.ToString("dd.MM.yyyy HH:mm:ss"); } }
     }
 }

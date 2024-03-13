@@ -27,7 +27,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         sqlLieferschein = new SqlLieferschein(getConnectionString());
        
-        //CsvManager.CreateCsvFile();
+       
         //CsvManager.FillListWithLastEntrys(angezeigteLieferscheine, 100);
         AuftragsListe.ItemsSource = angezeigteLieferscheine;
 
@@ -68,6 +68,7 @@ public partial class MainWindow : Window
                     MessageBox.Show("Lieferschein bereits gescannt. Datum aktualisiert");
                     sqlLieferschein.UpdateLieferschein(lieferscheinScan);
                     angezeigteLieferscheine.Add(lieferscheinScan);
+
                     uiCleanUp();
                 }
                 else
@@ -112,10 +113,24 @@ public partial class MainWindow : Window
         if (e.Key == Key.Enter)
         {
             if (KontrolleTextBox.Text.inputCheckLieferschein())
-            {
-                ;
+            { 
+                string searchResult = "Lieferschein nicht gefunden";
 
-                MessageBox.Show(sqlLieferschein.SucheNachLieferschein(KontrolleTextBox.Text).ToString());
+                try 
+                {
+                    searchLieferschein found = sqlLieferschein.SucheNachLieferschein(KontrolleTextBox.Text);
+                    if (found.Lieferschein == KontrolleTextBox.Text)
+                    {
+                        searchResult = $"{found.Lieferschein} \nKommissionierung: {found.EingangsTS} \nMontage: {found.MontageTS}";
+                    }
+                } 
+                catch 
+                {
+                   
+                }
+               
+                MessageBox.Show(searchResult);
+                
                 KontrolleTextBox.Clear();
                 KontrolleTextBox.Background = Brushes.White;
             }

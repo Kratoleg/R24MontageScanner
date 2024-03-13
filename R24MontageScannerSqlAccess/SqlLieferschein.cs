@@ -49,7 +49,6 @@ public class SqlLieferschein
     {
         //I was about to check the Values before
         string command = "update dbo.Vorgang set MontageTS = @MontageTS, MitarbeiterId= @MonteurId where Lieferschein = @Lieferschein;";
-
         dbAccess.SaveData(command, new { input.Lieferschein, input.MontageTS, MonteurId }, _connectionString);
     }
 

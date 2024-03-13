@@ -29,7 +29,7 @@ public partial class MonteurScanner : Window
         //Display a few Values inside the ListBox
         DisplayName.Text = "Kein Mitarbeiter";
         AuftragsListe.ItemsSource = angezeigteLieferscheine;
-        
+
     }
 
 
@@ -37,30 +37,45 @@ public partial class MonteurScanner : Window
     private void saveLieferscheinToDb(string lieferschein)
     {
         _lieferscheinInput = new MontageLieferscheinModel(lieferschein);
-        _sqlLs.LieferscheinMontageScan(_lieferscheinInput, _loggedInMitarbeiter.Id);
 
-       
-        
+        //If Inputscan true update
+        try
+        {
+            _sqlLs.SucheNachLieferschein(lieferschein);
+            _sqlLs.LieferscheinMontageScan(_lieferscheinInput, _loggedInMitarbeiter.Id);
+        }
+        catch (Exception ex)
+        {
+            EingangsLieferscheinModel input = new EingangsLieferscheinModel(lieferschein);
+
+            _sqlLs.LieferscheinEingangsScan(input);
+            _sqlLs.LieferscheinMontageScan(_lieferscheinInput, _loggedInMitarbeiter.Id);
+            
+        }
+
+
+        //If Inputscan false Add
+
+
     }
     private void saveLieferscheinToDisplayList()
     {
-        MessageBox.Show($"{_lieferscheinInput.Lieferschein} {_loggedInMitarbeiter.Nachname} {_lieferscheinInput.MontageTS}");
-        angezeigteLieferscheine.Add( new DisplayedModel { Lieferschein = _lieferscheinInput.Lieferschein, Nachname = _loggedInMitarbeiter.Nachname, TimeStamp = _lieferscheinInput.MontageTS});
+        angezeigteLieferscheine.Add(new DisplayedModel { Lieferschein = _lieferscheinInput.Lieferschein, Nachname = _loggedInMitarbeiter.Nachname, TimeStamp = _lieferscheinInput.MontageTS });
     }
 
     private void mitarbeiterLogin(string mitarbeiterChipId)
     {
         //No LoggedIn
-        if(_loggedInMitarbeiter == null)
+        if (_loggedInMitarbeiter == null)
         {
             _loggedInMitarbeiter = _sqlMa.GetMiarbeiterByChip(mitarbeiterChipId);
-            
+
         }
         //Current User Logged in
-        else if(_loggedInMitarbeiter != null && _loggedInMitarbeiter.ChipId == mitarbeiterChipId)
+        else if (_loggedInMitarbeiter != null && _loggedInMitarbeiter.ChipId == mitarbeiterChipId)
         {
             _loggedInMitarbeiter = null;
-            
+
         }
         //different User logged in
         else if (_loggedInMitarbeiter != null && _loggedInMitarbeiter.ChipId != mitarbeiterChipId)
@@ -84,15 +99,14 @@ public partial class MonteurScanner : Window
 
     private void inputTextBox_KeyDown(object sender, KeyEventArgs e)
     {
-        if(e.Key == Key.Enter)
+        if (e.Key == Key.Enter)
         {
             //Check for the Input if tis ChipID or LS
             if (inputTextBox.Text.inputCheckLieferschein())
             {
                 if (_loggedInMitarbeiter == null)
                 {
-                    DisplayName.Background = Brushes.Red;
-                    ValidinputWarning();
+                    InvalidInputWarning();
                 }
                 else if (_loggedInMitarbeiter != null)
                 {
