@@ -69,10 +69,6 @@ public class SqlLieferschein
     private bool InputLsCheck(EingangsLieferscheinModel input)
     {
         bool output = false;
-        string tempDELETEME = input.EingangsTS.Year.ToString();
-        string CurrentTime = DateTime.Now.Year.ToString();
-        string futureTime = DateTime.Now.AddYears(1).Year.ToString();
-
         if (input.Lieferschein.Length == 7 && (input.EingangsTS.AddYears(-1).Year == DateTime.Now.Year || input.EingangsTS.Year == DateTime.Now.Year))
         {
             output = true;

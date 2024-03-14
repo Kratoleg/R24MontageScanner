@@ -44,7 +44,7 @@ public partial class MonteurScanner : Window
             _sqlLs.SucheNachLieferschein(lieferschein);
             _sqlLs.LieferscheinMontageScan(_lieferscheinInput, _loggedInMitarbeiter.Id);
         }
-        catch (Exception ex)
+        catch
         {
             EingangsLieferscheinModel input = new EingangsLieferscheinModel(lieferschein);
 

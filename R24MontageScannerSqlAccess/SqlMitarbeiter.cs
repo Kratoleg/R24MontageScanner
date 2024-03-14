@@ -39,7 +39,7 @@ public class SqlMitarbeiter
         }
         else
         {
-            throw new Exception( "Mitarbeiter nicht funden");
+            return null;
         }
 
     }
