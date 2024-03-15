@@ -36,6 +36,14 @@
             <Label>Prüfung:</Label>
             <TextBox x:Name="KontrolleTextBox" MinWidth="150" Margin="10 0 0 0" KeyDown="KontrolleTextBox_KeyDown" TabIndex="2" />
         </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Right" VerticalAlignment="Center" Grid.ColumnSpan="4" Margin="0 0 20 0" >
+            <Button Content="Mitarbeiter" FontSize="16" HorizontalAlignment="Center" TabIndex="4" VerticalAlignment="Center" Width="100" Height="34" Click="neuesMitarbeiterFenster"/>
+        </StackPanel>
+        
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal"  HorizontalAlignment="Right" VerticalAlignment="Center" Grid.ColumnSpan="4" Margin="0 0 20 0" >
+            <Button Content="Montage" FontSize="16" HorizontalAlignment="Center" TabIndex="4" VerticalAlignment="Center" Width="100" Height="34" Click="MontageFenser"/>
+        </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="1"  VerticalAlignment="Center">
 
             <ListBox  x:Name="AuftragsListe" HorizontalAlignment="Center" MinHeight="300" MaxHeight="350" MinWidth="350" VerticalAlignment="Bottom" Loaded="AuftragsListe_Loaded"  >
@@ -43,11 +51,8 @@
                     <DataTemplate>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
                             <StackPanel Orientation="Horizontal" AllowDrop="True" >
-                                <TextBlock Text="{Binding Path=Lieferschein}" />
-                                <TextBlock Text="      " />
-                                <TextBlock Text="{Binding Path=StringEingangsTimeStamp}" />
-
-
+                                <TextBlock Text="{Binding Path=Lieferschein}" Margin="0 0 15 0" />
+                                <TextBlock Text="{Binding Path=StringEingangsTS}" />
                             </StackPanel>
                         </ScrollViewer>
                     </DataTemplate>

@@ -1,101 +1,163 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Linq;
 using MontageScanLib;
+using R24MontageScannerSqlAccess;
+using R24MontageScannerSqlAccess.Models;
+using R24MontageScannerUI;
 
 
- 
-namespace MontageEingangScanUI
+
+namespace MontageEingangScanUI;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    BindingList<EingangsLieferscheinModel> angezeigteLieferscheine = new BindingList<EingangsLieferscheinModel>();
+    SqlLieferschein sqlLieferschein;
+    public MainWindow()
     {
-        BindingList<MontageLieferscheinModel> angezeigteLieferscheine = new BindingList<MontageLieferscheinModel>();
+        InitializeComponent();
+        sqlLieferschein = new SqlLieferschein(getConnectionString("TrainingMontageScan"));
+        AuftragsListe.ItemsSource = angezeigteLieferscheine;
+    }
 
+    private string getConnectionString(string name)
+    {
+        ConnectionStringSettings? settings =
+            ConfigurationManager.ConnectionStrings[name];
+        return settings?.ConnectionString;
+    }
 
-
-        public MainWindow()
+    private void AuftragsListe_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (AuftragsListe.Items is INotifyCollectionChanged collection)
         {
-            InitializeComponent();
-
-            CsvManager.CreateCsvFile();
-            CsvManager.FillListWithLastEntrys(angezeigteLieferscheine, 100);
-            AuftragsListe.ItemsSource = angezeigteLieferscheine;
-
-        }
-
-
-        private void AuftragsListe_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (AuftragsListe.Items is INotifyCollectionChanged collection)
+            collection.CollectionChanged += (s, args) =>
             {
-                collection.CollectionChanged += (s, args) =>
+                if (args.Action == NotifyCollectionChangedAction.Add)
                 {
-                    if (args.Action == NotifyCollectionChangedAction.Add)
-                    {
-                        AuftragsListe.ScrollIntoView(args.NewItems[0]);
-                    }
-                };
-            }
-        }
-
-
-
-        private void eingangsScanTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                if (eingangsScanTextBox.Text.InputCheck())
-                {
-                    MontageLieferscheinModel eingabe = new MontageLieferscheinModel(eingangsScanTextBox.Text);
-                    angezeigteLieferscheine.Add(eingabe);
-
-                    
-                    CsvManager.WriteToCsv(eingabe);
-                    eingangsScanTextBox.Background = Brushes.White;
-                    eingangsScanTextBox.Clear();
-                    AuftragsListe.ScrollIntoView(AuftragsListe.Items[AuftragsListe.Items.Count - 1]);
+                    AuftragsListe.ScrollIntoView(args.NewItems[0]);
                 }
-                else
-                {
-
-                    WrongInputAlarm(eingangsScanTextBox);
-                }
-
-            }
-        }
-        private void KontrolleTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                if (KontrolleTextBox.Text.InputCheck())
-                {
-
-                    MessageBox.Show(CsvManager.SearchForLS(KontrolleTextBox.Text));
-                    KontrolleTextBox.Clear();
-                    KontrolleTextBox.Background = Brushes.White;
-                }
-                else
-                {
-                    WrongInputAlarm(KontrolleTextBox);
-                }
-            }
-
-        }
-
-
-        private void WrongInputAlarm(TextBox sender)
-        {
-            sender.Background = Brushes.Red;
-            sender.Clear();
-            sender.Focus();
+            };
         }
     }
 
 
+
+    private void eingangsScanTextBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            if (eingangsScanTextBox.Text.inputCheckLieferschein())
+            {
+                EingangsLieferscheinModel lieferscheinScan = new EingangsLieferscheinModel(eingangsScanTextBox.Text);
+                if (lieferscheinExistsCheck(lieferscheinScan) == true)
+                {
+                    MessageBox.Show("Lieferschein bereits gescannt. Datum aktualisiert");
+                    sqlLieferschein.UpdateLieferschein(lieferscheinScan);
+                    angezeigteLieferscheine.Add(lieferscheinScan);
+
+                    uiCleanUp();
+                }
+                else
+                {
+                    sqlLieferschein.LieferscheinEingangsScan(lieferscheinScan);
+                    angezeigteLieferscheine.Add(lieferscheinScan);
+                    uiCleanUp();
+                }
+
+            }
+            else
+            {
+
+                WrongInputAlarm(eingangsScanTextBox);
+            }
+
+        }
+    }
+
+    private void uiCleanUp()
+    {
+        eingangsScanTextBox.Background = Brushes.White;
+        eingangsScanTextBox.Clear();
+        AuftragsListe.ScrollIntoView(AuftragsListe.Items[AuftragsListe.Items.Count - 1]);
+    }
+    private bool lieferscheinExistsCheck(EingangsLieferscheinModel input)
+    {
+        bool output;
+        try
+        {
+            sqlLieferschein.SucheNachLieferschein(input.Lieferschein);
+            output = true;
+        }
+        catch
+        {
+            output = false;
+        }
+        return output;
+    }
+    private void KontrolleTextBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            if (KontrolleTextBox.Text.inputCheckLieferschein())
+            {
+                string searchResult = "Lieferschein nicht gefunden";
+
+                try
+                {
+                    searchLieferschein found = sqlLieferschein.SucheNachLieferschein(KontrolleTextBox.Text);
+                    if (found.Lieferschein == KontrolleTextBox.Text)
+                    {
+                        searchResult = $"{found.Lieferschein} \nKommissionierung: {found.EingangsTS} \nMontage: {found.MontageTS}";
+                    }
+                }
+                catch
+                {
+
+                }
+
+                MessageBox.Show(searchResult);
+
+                KontrolleTextBox.Clear();
+                KontrolleTextBox.Background = Brushes.White;
+            }
+            else
+            {
+                WrongInputAlarm(KontrolleTextBox);
+            }
+        }
+
+    }
+
+
+    private void WrongInputAlarm(TextBox sender)
+    {
+        sender.Background = Brushes.Red;
+        sender.Clear();
+        sender.Focus();
+    }
+
+    private void neuesMitarbeiterFenster(object sender, RoutedEventArgs e)
+
+    {
+
+
+        AddUpdateUser addUser = new AddUpdateUser(getConnectionString("TrainingMontageScan"));
+        addUser.Show();
+    }
+
+    private void MontageFenser(object sender, RoutedEventArgs e)
+    {
+        MonteurScanner montageScanner = new MonteurScanner(getConnectionString("TrainingMontageScan"));
+        montageScanner.Show();
+    }
 }

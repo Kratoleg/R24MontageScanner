@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MontageScannerLibrary\MontageScannerLibrary.csproj" />
+    <ProjectReference Include="..\R24MontageScannerSqlAccess\R24MontageScannerSqlAccess.csproj" />
   </ItemGroup>
 
 </Project>
